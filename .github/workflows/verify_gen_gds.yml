@@ -21,8 +21,9 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
-          $CONDA/bin/conda env update --file environment.yml --name base
-          source git_runner_deps.sh
+          echo "logname is /home/$(logname)"
+          echo "home directory is ${HOME}"
+          source dependencies.sh
           source ~/miniconda3/bin/activate
           cd openfasoc/generators/gdsfactory-gen
           python3 -m pip install --upgrade pip

@@ -16,29 +16,15 @@ proceed_confirmed=false
 update_confirmed=false
 while ! $proceed_confirmed
 do
-        echo "[OpenFASoC] Do you wish to proceed with the installation?
-[y] Yes. Install for the first time.
-[u] Yes. Update already-installed dependencies.
-[n] No. Exit this script."
-        read -p "Select the desired option: " selection
-        if [ "$selection" == "y" ] || [ "$selection" == "Y" ]; then
         echo "Beginning installation..."; proceed_confirmed=true
-        elif [ "$selection" == "n" ] || [ "$selection" == "N" ]; then
-        echo "Quitting script."; exit
-        elif [ "$selection" == "u" ] || [ "$selection" == "U" ]; then
-        update_confirmed=true
-        proceed_confirmed=true
-        else
-        echo "[OpenFASoC] Invalid selection. Choose y or n."
-        fi
 done
 
 if $update_confirmed; then
-        if ! [ -x /home/$(logname)/miniconda3 ]; then
+        if ! [ -x "${HOME}/miniconda3" ]; then
                 echo "[OpenFASoC] Conda could not be found. If you have not yet successfully installed the dependencies, you cannot update the dependencies."
                 exit
         fi
-        export PATH=/home/$(logname)/miniconda3/bin:$PATH
+        export PATH="${HOME}/miniconda3/bin:$PATH"
 
         printf "\n[OpenFASoC] Attempting to update Conda using: conda update conda -y \n\n"
         conda update conda -y
@@ -142,8 +128,8 @@ fi
 
 if cat /etc/os-release | grep "ubuntu" >> /dev/null; then
 
-	apt-get update -y
-        apt-get install -y autoconf libtool libfmt-dev automake make g++ gcc
+  sudo apt-get update -y
+  sudo apt-get install -y autoconf libtool libfmt-dev automake make g++ gcc
 
 elif cat /etc/os-release | grep -e "centos" >> /dev/null; then
 
@@ -154,32 +140,32 @@ elif cat /etc/os-release | grep -e "centos" >> /dev/null; then
 fi
 
 # install miniconda3
-if ! [ -x /home/$(logname)/miniconda3 ]
+if ! [ -x "${HOME}/miniconda3" ]
 then
       wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && bash ./Miniconda3-latest-Linux-x86_64.sh -b -p /home/$(logname)/miniconda3 \
+    && bash ./Miniconda3-latest-Linux-x86_64.sh -b -p "${HOME}/miniconda3" \
     && rm ./Miniconda3-latest-Linux-x86_64.sh
 else
     echo "[OpenFASoC] Found miniconda3. Continuing the installation...\n"
 fi
 
-if [ $? == 0 ] && [ -x /home/$(logname)/miniconda3/ ]
+if [ $? == 0 ] && [ -x "${HOME}/miniconda3/" ]
 then
         echo "[OpenFASoC] miniconda3 installed successfully. Continuing the installation...\n"
-        if ! grep -q "/home/$(logname)/miniconda3/bin" /home/$(logname)/.bashrc || ! echo "$PATH" | grep -q "/home/$(logname)/miniconda3/bin"; then
-                echo "" >> /home/$(logname)/.bashrc
-                echo 'export PATH="/home/$(logname)/miniconda3/bin:$PATH"' >> /home/$(logname)/.bashrc
+        if ! grep -q "${HOME}/miniconda3/bin" "${HOME}/.bashrc" || ! echo "$PATH" | grep -q "${HOME}/miniconda3/bin"; then
+                echo "" >> "${HOME}/.bashrc"
+                echo 'export PATH="${HOME}/miniconda3/bin:$PATH"' >> "${HOME}/.bashrc"
                 echo "[OpenFASoC] miniconda3 added to PATH"
         fi
-	export PATH=/home/$(logname)/miniconda3/bin:$PATH
+	export PATH="${HOME}/miniconda3/bin:$PATH"
 else
 	echo "[OpenFASoC] Failed to install miniconda. Check above for error messages."
 	exit
 fi
 
-source /home/$(logname)/miniconda3/etc/profile.d/conda.sh
+source "${HOME}/miniconda3/etc/profile.d/conda.sh"
 
-if [ $? == 0 ] && [ -x /home/$(logname)/miniconda3/ ]
+if [ $? == 0 ] && [ -x "${HOME}/miniconda3/" ]
 then
 	conda update -y conda --all
         conda install python=3.10 -c anaconda -c conda-forge -c litex-hub
@@ -192,7 +178,7 @@ fi
 
 
 # download packages using pip3 in miniconda3
-export PATH=/home/$(logname)/miniconda3/bin/pip3:$PATH
+export PATH="${HOME}/miniconda3/bin/pip3:$PATH"
 
 if which pip3 >> /dev/null
 then
@@ -211,13 +197,13 @@ source ~/.bashrc
 
 if cat /etc/os-release | grep "ubuntu" >> /dev/null
 then
- apt install bison flex libx11-dev libx11-6 libxaw7-dev libreadline6-dev autoconf libtool automake -y
+ sudo apt install bison flex libx11-dev libx11-6 libxaw7-dev libreadline6-dev autoconf libtool automake -y
  git clone http://git.code.sf.net/p/ngspice/ngspice
  currentver="$(lsb_release -rs)"
  requiredver="22.04"
  if [ $currentver == $requiredver ]
- then 
-   cd ngspice 
+ then
+   cd ngspice
    sed -i -e 's/--with-readline=yes//g' compile_linux.sh
   ./compile_linux.sh
  else
@@ -265,16 +251,16 @@ then
  	requiredver="22.04"
  	if [ $currentver == $requiredver ]
  	then
-	 apt install qtbase5-dev qttools5-dev libqt5xmlpatterns5-dev qtmultimedia5-dev libqt5multimediawidgets5 libqt5svg5-dev ruby ruby-dev python3-dev libz-dev build-essential -y 
+	 sudo apt install qtbase5-dev qttools5-dev libqt5xmlpatterns5-dev qtmultimedia5-dev libqt5multimediawidgets5 libqt5svg5-dev ruby ruby-dev python3-dev libz-dev build-essential -y
 	 wget https://www.klayout.org/downloads/Ubuntu-22/klayout_0.28.12-1_amd64.deb
 	 dpkg -i klayout_0.28.12-1_amd64.deb
-	else 
-	 apt install qt5-default qttools5-dev libqt5xmlpatterns5-dev qtmultimedia5-dev libqt5multimediawidgets5 libqt5svg5-dev ruby ruby-dev python3-dev libz-dev build-essential -y
+	else
+	 sudo apt install qt5-default qttools5-dev libqt5xmlpatterns5-dev qtmultimedia5-dev libqt5multimediawidgets5 libqt5svg5-dev ruby ruby-dev python3-dev libz-dev build-essential -y
 	 wget https://www.klayout.org/downloads/Ubuntu-20/klayout_0.28.12-1_amd64.deb
 	 dpkg -i klayout_0.28.12-1_amd64.deb
   	 strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 #https://stackoverflow.com/questions/63627955/cant-load-shared-library-libqt5core-so-5
 	fi
-	apt install time -y
+	sudo apt install time -y
 	elif cat /etc/os-release | grep -e "centos" >> /dev/null
 then
 	yum install qt5-qtbase-devel qt5-qttools-devel qt5-qtxmlpatterns-devel qt5-qtmultimedia-devel qt5-qtmultimedia-widgets-devel qt5-qtsvg-devel ruby ruby-devel python3-devel zlib-devel time -y
@@ -294,18 +280,18 @@ else
  exit
 fi
 
-export PATH=/home/$(logname)/miniconda3/:$PATH
+export PATH="${HOME}/miniconda3/:$PATH"
 
-if [ -x /home/$(logname)/miniconda3/share/pdk/ ]
+if [ -x "${HOME}/miniconda3/share/pdk/" ]
 then
-        if ! grep -q "PDK_ROOT=/home/$(logname)/miniconda3/share/pdk/" /home/$(logname)/.bashrc; then
-                echo "" >> /home/$(logname)/.bashrc
-                echo 'export PDK_ROOT=/home/$(logname)/miniconda3/share/pdk/' >> /home/$(logname)/.bashrc
+        if ! grep -q "PDK_ROOT=${HOME}/miniconda3/share/pdk/" "${HOME}/.bashrc"; then
+                echo "" >> "${HOME}/.bashrc"
+                echo 'export PDK_ROOT=${HOME}/miniconda3/share/pdk/' >> "${HOME}/.bashrc"
         fi
-        export PDK_ROOT=/home/$(logname)/miniconda3/share/pdk/
+        export PDK_ROOT="${HOME}/miniconda3/share/pdk/"
         source ~/.bashrc
-        
-        echo "[OpenFASoC] PDK_ROOT is set to /home/$(logname)/miniconda3/share/pdk/. If this variable is empty, try setting PDK_ROOT variable to /home/$(logname)/miniconda3/share/pdk/"
+
+        echo "[OpenFASoC] PDK_ROOT is set to ${HOME}/miniconda3/share/pdk/. If this variable is empty, try setting PDK_ROOT variable to ${HOME}/miniconda3/share/pdk/"
 else
         echo "[OpenFASoC] PDK not installed"
 fi
