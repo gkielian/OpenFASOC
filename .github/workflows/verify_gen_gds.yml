@@ -21,19 +21,16 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
+          $CONDA/bin/conda env update --file environment.yml --name base
           source git_runner_deps.sh
           source ~/miniconda3/bin/activate
           cd openfasoc/generators/gdsfactory-gen
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
-      - name: Run gen_opamp
-        run: |
+          ls
+          cd tapeout_and_RL
           ls
           python3 sky130_nist_tapeout.py gen_opamp -output_gds test.gds
-          ls
-      - name: Run test
-        run: |
-          ls
           python3 sky130_nist_tapeout.py test -output_dir test_output_dir
           ls
 

@@ -16,22 +16,9 @@ proceed_confirmed=false
 update_confirmed=false
 while ! $proceed_confirmed
 do
-        echo "[OpenFASoC] Do you wish to proceed with the installation?
-[y] Yes. Install for the first time.
-[u] Yes. Update already-installed dependencies.
-[n] No. Exit this script."
-        read -p "Select the desired option: " selection
-        selection="y"
-        if [ "$selection" == "y" ] || [ "$selection" == "Y" ]; then
         echo "Beginning installation..."; proceed_confirmed=true
-        elif [ "$selection" == "n" ] || [ "$selection" == "N" ]; then
-        echo "Quitting script."; exit
-        elif [ "$selection" == "u" ] || [ "$selection" == "U" ]; then
         update_confirmed=true
         proceed_confirmed=true
-        else
-        echo "[OpenFASoC] Invalid selection. Choose y or n."
-        fi
 done
 
 if $update_confirmed; then
