@@ -21,7 +21,7 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
-          source ./dependencies.sh
+          source git_runner_deps.sh
           source ~/miniconda3/bin/activate
           cd openfasoc/generators/gdsfactory-gen
           python3 -m pip install --upgrade pip
