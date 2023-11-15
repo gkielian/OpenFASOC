@@ -6,6 +6,7 @@ import random
 import yaml
 import os
 import argparse
+import path_module_thing
 
 def gen_data(env, num_specs):
 
@@ -34,7 +35,7 @@ def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--num_specs', type=str)
   args = parser.parse_args()
-  
+
   gen_data("newnew_eval_3.yaml", int(50))
 
 if __name__=="__main__":

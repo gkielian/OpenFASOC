@@ -4,6 +4,7 @@ import ray
 import ray.tune as tune
 from ray.rllib.algorithms.ppo import PPO
 from run_training import Envir
+import path_module_thing
 from sky130_nist_tapeout import single_build_and_simulation
 
 import argparse
@@ -12,14 +13,14 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--checkpoint_dir', '-cpd', type=str)
 args = parser.parse_args()
-ray.init(num_cpus=33, num_gpus=0,include_dashboard=True, ignore_reinit_error=True)
+ray.init(num_cpus=120, num_gpus=0, include_dashboard=True, ignore_reinit_error=True)
 
 #configures training of the agent with associated hyperparameters
 config_train = {
             "env": Envir,
             "train_batch_size": 1000,
             "model":{"fcnet_hiddens": [64, 64]},
-            "num_workers": 32,
+            "num_workers": 119,
             "env_config":{"generalize":True, "run_valid":False, "horizon":20},
             }
 
