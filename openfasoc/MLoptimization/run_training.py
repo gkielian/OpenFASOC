@@ -248,7 +248,7 @@ class Envir(gym.Env):
         #cur_specs = OrderedDict(sorted(self.sim_env.create_design_and_simulate(param_val[0])[1].items(), key=lambda k:k[0]))
         inputparam = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.0,
                                0.0, 0.0, 0.0, 0.0, 5.0, 1.0, 16.0, 6.0, 2.0,
-                               6.0, 1.0, 6.0, 4.0, 12.0, 12.0, 0.0, 2.0])
+                               4.0, 6.0, 1.0, 6.0, 12.0, 12.0, 0.0, 2.0])
         inputparam[0:3] = params[0:3]
         inputparam[3:6] = params[3:6]
         inputparam[6:9] = params[6:9]
